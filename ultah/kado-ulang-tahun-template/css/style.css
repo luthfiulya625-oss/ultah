@@ -1,0 +1,2862 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+:root {
+  --rose: #bd7186;
+  --rose-deep: #9c536c;
+  --ink: #513d46;
+  --paper: #fffaf3;
+  --pink: #f6dfe3;
+  --cream: #fbf2e7;
+  --sage: #b6c5ad;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background: #f8eee9;
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+button { font: inherit; }
+.ambient {
+  position: fixed;
+  z-index: -2;
+  border-radius: 50%;
+  filter: blur(3px);
+  pointer-events: none;
+}
+.ambient-one {
+  width: 380px; height: 380px; top: -100px; left: -130px;
+  background: radial-gradient(circle, #f6d4df 0, #f6d4df00 70%);
+}
+.ambient-two {
+  width: 460px; height: 460px; right: -160px; bottom: -120px;
+  background: radial-gradient(circle, #e6d9bd 0, #e6d9bd00 70%);
+}
+.sparkles {
+  position: fixed; top: 24px; right: 5%; z-index: -1;
+  color: #b98596; opacity: .65; letter-spacing: 8px;
+  font-size: 20px; animation: drift 8s ease-in-out infinite;
+}
+.page {
+  display: none;
+  min-height: 100vh;
+  padding: 42px 20px 30px;
+  animation: pageIn .8s ease both;
+}
+.page.active { display: flex; }
+.page-one {
+  flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; position: relative; isolation: isolate;
+}
+.intro-copy { max-width: 650px; margin-bottom: 22px; }
+.eyebrow {
+  color: var(--rose-deep); font-size: .68rem; font-weight: 700;
+  letter-spacing: .24em; display: inline-block; margin-bottom: 14px;
+}
+.intro-copy h1, .page-two-header h1 {
+  font: 600 clamp(2.25rem, 5vw, 4.2rem)/1.08 'Playfair Display', serif;
+  letter-spacing: -.04em; margin: 0; color: #573f49;
+}
+.intro-copy h1 em, .page-two-header h1 em { color: var(--rose); font-weight: 500; }
+.intro-subtitle { margin: 17px auto 0; max-width: 440px; color: #856e76; font-size: .95rem; }
+.envelope-stage {
+  width: min(100%, 490px); min-height: 440px; position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+}
+.envelope {
+  position: relative; width: min(88vw, 370px); height: 245px;
+  margin-top: 18px; filter: drop-shadow(0 24px 24px #9b657026);
+  transition: transform .5s ease;
+}
+.envelope:hover { transform: translateY(-5px) rotate(-.5deg); }
+.envelope-back {
+  position: absolute; inset: 0; border-radius: 8px;
+  background: #e6b8bd; border: 1px solid #d9a5ad;
+}
+.letter-preview {
+  position: absolute; z-index: 1; left: 8%; right: 8%; top: -37px; height: 230px;
+  background: var(--paper); border-radius: 5px; padding: 13px 12px 8px;
+  box-shadow: 0 3px 10px #9c536c12; overflow: hidden;
+  transition: transform .8s cubic-bezier(.2,.8,.2,1), top .8s ease;
+}
+.letter-topline { font-size: .52rem; letter-spacing: .18em; color: #a77b86; }
+.round-photo-wrap {
+  width: 83px; height: 83px; border-radius: 50%; margin: 8px auto 5px;
+  padding: 4px; background: #f1d0d4; box-shadow: 0 0 0 4px #fff, 0 0 0 5px #ead0c9;
+}
+.round-photo { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.mini-greeting { margin: 0; color: #a77b86; font-size: .58rem; letter-spacing: .08em; }
+.letter-preview h2 {
+  margin: 2px 0 0; color: #b45f7c;
+  font: 600 1.45rem/.98 'Playfair Display', serif;
+}
+.mini-heart { color: #cc8397; font-size: .75rem; }
+.envelope-front {
+  position: absolute; z-index: 2; inset: 0; border-radius: 8px;
+  background: linear-gradient(145deg, #f4d2d2, #eabfc3);
+  clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+}
+.envelope-flap {
+  position: absolute; z-index: 3; inset: 0;
+  background: linear-gradient(160deg, #f7dfdc, #eac0c5);
+  clip-path: polygon(0 0, 100% 0, 50% 61%);
+  transform-origin: top; transition: transform .7s ease;
+}
+.seal {
+  position: absolute; z-index: 4; left: 50%; top: 52%; transform: translate(-50%, -50%);
+  display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%;
+  color: #fff7f3; background: #bc7387; border: 3px solid #f4d5d6;
+  box-shadow: 0 3px 8px #75445124; font-size: 20px;
+}
+.envelope.opened .envelope-flap { transform: rotateX(180deg); }
+.envelope.opened .letter-preview { top: -115px; transform: scale(1.04); }
+.envelope.opened .seal { opacity: 0; transition: opacity .2s; }
+.tap-hint { color: #987783; font-size: .78rem; margin: 14px 0 12px; }
+.btn-open {
+  position: relative; z-index: 5; display: inline-flex; align-items: center; gap: 22px;
+  border: 0; border-radius: 100px; padding: 14px 18px 14px 25px;
+  color: white; background: #a95f78; box-shadow: 0 10px 25px #a95f7838;
+  transition: transform .25s, background .25s, box-shadow .25s;
+}
+.btn-open:hover { transform: translateY(-3px); background: #914b65; box-shadow: 0 14px 28px #a95f7847; }
+.btn-arrow { display: grid; place-items: center; width: 27px; height: 27px; border-radius: 50%; background: #ffffff25; }
+.bottom-note { margin: 8px 0 0; color: #a58b94; font-size: .72rem; letter-spacing: .04em; }
+.bottom-note span { color: #bf7387; }
+.floating-deco {
+  position: absolute; z-index: 5; border: 0; background: #fffaf4cc;
+  color: #b56e84; box-shadow: 0 5px 18px #8d56621c;
+  display: grid; place-items: center; cursor: pointer; transition: transform .3s;
+}
+.floating-deco:hover { transform: scale(1.2) rotate(12deg); }
+.deco-heart { width: 51px; height: 51px; border-radius: 50%; font-size: 28px; top: 90px; left: 4%; animation: bob 3s ease-in-out infinite; }
+.deco-star { width: 42px; height: 42px; border-radius: 14px; font-size: 24px; top: 35px; right: 6%; animation: bob 3.8s ease-in-out infinite reverse; }
+.deco-flower { width: 48px; height: 48px; border-radius: 50%; font-size: 26px; right: 3%; top: 205px; animation: bob 4.2s ease-in-out infinite; }
+.tiny-spark { position: absolute; color: #c48a99; font-size: 23px; }
+.spark-a { left: 13%; top: 230px; }.spark-b { right: 14%; top: 10px; }.spark-c { left: 21%; top: 20px; }
+.float-pop {
+  position: fixed; pointer-events: none; z-index: 100; font-size: 24px;
+  animation: popAway 1.1s ease-out forwards;
+}
+.page-two { flex-direction: column; align-items: center; padding-top: 58px; }
+.page-two-header { text-align: center; max-width: 660px; margin-bottom: 34px; }
+.page-two-header p { color: #88717a; margin: 16px 0 0; }
+.memory-layout {
+  width: min(1100px, 100%); display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, .95fr);
+  gap: clamp(28px, 5vw, 70px); align-items: center;
+}
+.polaroid-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 25px 20px; padding: 15px 8px;
+}
+.polaroid {
+  position: relative; width: 100%; min-width: 0; padding: 10px 10px 17px;
+  border: 0; background: #fffdf9; box-shadow: 0 8px 18px #4d303011, 0 2px 5px #4d30310a;
+  cursor: pointer; text-align: center; color: #71545e;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
+}
+.polaroid img { width: 100%; aspect-ratio: 4 / 4.6; object-fit: cover; display: block; }
+.polaroid-caption { display: block; padding-top: 12px; font: italic .88rem 'Playfair Display', serif; }
+.polaroid-one { transform: rotate(-4deg); }
+.polaroid-two { transform: rotate(3.5deg); margin-top: 16px; }
+.polaroid-three { transform: rotate(2.5deg); margin-top: -7px; }
+.polaroid-four { transform: rotate(-3deg); margin-top: 10px; }
+.polaroid:hover, .polaroid:focus-visible {
+  transform: rotate(0) translateY(-9px) scale(1.035); z-index: 4;
+  box-shadow: 0 20px 30px #4d303122; outline: 2px solid #d8a4b2; outline-offset: 3px;
+}
+.tape {
+  position: absolute; z-index: 2; width: 70px; height: 19px; top: -8px; left: calc(50% - 35px);
+  background: #e3d6a8bd; transform: rotate(-5deg); box-shadow: 0 1px 2px #5b44440d;
+}
+.tape-pink { background: #eebfc9c9; transform: rotate(7deg); }
+.tape-yellow { background: #eee0a6c9; transform: rotate(3deg); }
+.tape-blue { background: #c6dce0c9; transform: rotate(-7deg); }
+.birthday-letter {
+  position: relative; background: #fffaf0; padding: clamp(25px, 4vw, 43px);
+  box-shadow: 0 15px 35px #72534212; border: 1px solid #f1e4d3;
+  transform: rotate(.6deg); overflow: hidden;
+}
+.birthday-letter::before {
+  content: ""; position: absolute; inset: 9px; border: 1px solid #ead8c9; pointer-events: none;
+}
+.letter-decoration, .letter-date, .birthday-letter h2, .birthday-letter p, .letter-rule, .letter-bottom-flower { position: relative; z-index: 1; }
+.letter-decoration { text-align: center; color: #c88c9d; letter-spacing: .25em; font-size: 1.1rem; }
+.letter-date { text-align: center; margin: 14px 0 8px; color: #aa8290; font-size: .62rem; letter-spacing: .18em; }
+.birthday-letter h2 { font: 600 clamp(1.65rem, 3vw, 2.3rem) 'Playfair Display', serif; text-align: center; color: #a85f78; margin-bottom: 17px; }
+.birthday-letter h2 span { font-size: .8em; }
+.letter-rule { width: 56px; height: 1px; background: #d8a5ad; margin: 0 auto 23px; }
+.birthday-letter p { font: 400 .92rem/1.85 'Playfair Display', serif; color: #6d5660; }
+.birthday-letter .letter-closing { margin-top: 22px; margin-bottom: 0; font-style: italic; font-size: 1.7em; }
+.birthday-letter .letter-signature { font: italic 1.5rem 'Playfair Display', serif; color: #ad6680; margin-top: 1px; }
+.letter-signature span { font-size: .85rem; }
+.letter-bottom-flower { text-align: right; color: #c88c9d; font-size: 1.3rem; }
+.closing-note { text-align: center; margin: 40px 0 25px; color: #9a7884; }
+.btn-back { border: 1px solid #d9a8b4; border-radius: 100px; padding: 9px 16px; color: #9c536c; background: #fff8f4; font-size: .8rem; }
+.btn-back:hover { background: #f6dfe3; }
+.music-player {
+  position: fixed; z-index: 30; right: 22px; bottom: 20px;
+  display: flex; align-items: center; gap: 12px; padding: 9px 10px 9px 16px;
+  background: #fffaf2eF; border: 1px solid #ecd8d8; border-radius: 60px;
+  box-shadow: 0 10px 28px #68434b20; backdrop-filter: blur(12px);
+}
+.music-label { display: flex; flex-direction: column; text-align: right; gap: 2px; }
+.music-label span { font-size: .58rem; letter-spacing: .11em; font-weight: 700; color: #9c536c; }
+.music-label small { font-size: .63rem; color: #9b858d; }
+.record-button {
+  position: relative; flex: 0 0 auto; width: 62px; height: 62px; border: 0; border-radius: 50%;
+  background: repeating-radial-gradient(circle at center, #2f2c32 0 2px, #454149 3px 4px, #28262b 5px 7px);
+  box-shadow: inset 0 0 0 2px #1f1d22, 0 3px 8px #39272c35; cursor: pointer;
+}
+.record-center {
+  position: absolute; width: 24px; height: 24px; border-radius: 50%; top: 19px; left: 19px;
+  display: grid; place-items: center; color: #fff4e6; font-size: 12px;
+  background: #bd7186; border: 3px solid #f2d5d7;
+}
+.record-grooves { position: absolute; inset: 9px; border: 1px solid #ffffff13; border-radius: 50%; }
+.record-arm {
+  position: absolute; width: 21px; height: 3px; right: -1px; top: 7px;
+  border-radius: 5px; background: #d8c8c4; transform: rotate(35deg); transform-origin: right center;
+}
+.record-button.playing { animation: spin 3s linear infinite; }
+.record-button.playing .record-arm { transform: rotate(18deg); }
+.photo-modal {
+  display: none; position: fixed; z-index: 80; inset: 0; align-items: center; justify-content: center;
+  flex-direction: column; padding: 30px; background: #3e2c37dd; color: white; text-align: center;
+  backdrop-filter: blur(7px);
+}
+.photo-modal.show { display: flex; animation: fadeIn .25s ease both; }
+.photo-modal p { max-width: 440px; font: italic 1.7rem 'Playfair Display', serif; }
+.photo-modal span { color: #f2b9c8; font-size: 1.5rem; }
+.modal-close {
+  position: absolute; top: 18px; right: 24px; width: 44px; height: 44px; border: 1px solid #ffffff70;
+  border-radius: 50%; color: white; background: transparent; font-size: 30px; line-height: 1;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -9px; } }
+@keyframes drift { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(12px) rotate(7deg); } }
+@keyframes pageIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes popAway { 0% { opacity: 1; transform: translateY(0) scale(.7) rotate(0); } 100% { opacity: 0; transform: translateY(-90px) scale(1.5) rotate(20deg); } }
+
+@media (max-width: 850px) {
+  .memory-layout { grid-template-columns: 1fr; max-width: 620px; }
+  .birthday-letter { margin: 5px 12px; }
+  .page-two-header { margin-bottom: 20px; }
+  .polaroid-grid { max-width: 560px; margin: auto; }
+}
+@media (max-width: 520px) {
+  .page { padding: 32px 15px 28px; }
+  .intro-copy { margin-bottom: 15px; }
+  .intro-copy h1 { font-size: 2.45rem; }
+  .intro-subtitle { font-size: .85rem; }
+  .envelope-stage { min-height: 400px; }
+  .envelope { height: 218px; width: min(85vw, 340px); }
+  .letter-preview { height: 215px; }
+  .envelope.opened .letter-preview { top: -92px; }
+  .deco-heart { left: 0; top: 75px; }
+  .deco-star { right: 0; top: 25px; }
+  .deco-flower { right: 0; top: 190px; }
+  .spark-a { left: 3%; top: 220px; }.spark-c { left: 10%; }
+  .polaroid-grid { gap: 22px 13px; padding: 10px 4px; }
+  .polaroid { padding: 7px 7px 13px; }
+  .polaroid-caption { font-size: .72rem; padding-top: 9px; }
+  .music-player { right: 12px; bottom: 12px; gap: 8px; padding: 7px 8px 7px 12px; }
+  .record-button { width: 53px; height: 53px; }
+  .record-center { top: 15px; left: 15px; }
+  .music-label span { font-size: .51rem; }
+  .music-label small { font-size: .57rem; }
+  .closing-note { margin-bottom: 85px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+
+/* =========================================
+   PERBAIKAN HALAMAN 1 - BIRTHDAY ENVELOPE
+========================================= */
+
+.page-one {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 100vh;
+    padding: 38px 24px 24px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background:
+        radial-gradient(
+            circle at 5% 10%,
+            rgba(246, 210, 216, 0.30),
+            transparent 27%
+        ),
+        radial-gradient(
+            circle at 96% 90%,
+            rgba(231, 212, 178, 0.36),
+            transparent 25%
+        ),
+        #f9efeb;
+}
+
+.page-one.active {
+    display: flex;
+}
+
+/* Judul berada di tengah halaman */
+
+.intro-copy {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto 12px;
+    text-align: center;
+}
+
+.intro-copy .eyebrow {
+    color: #b46e82;
+    font-size: 0.68rem;
+    letter-spacing: 0.24em;
+    font-weight: 700;
+    margin-bottom: 16px;
+}
+
+.intro-copy h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5.7vw, 5rem);
+    line-height: 1.03;
+    letter-spacing: -0.045em;
+    color: #583e49;
+    margin: 0;
+    font-weight: 600;
+}
+
+.intro-copy h1 em {
+    color: #c4778d;
+    font-weight: 500;
+}
+
+.intro-subtitle {
+    max-width: 490px;
+    margin: 18px auto 0;
+    color: #947982;
+    font-size: 0.91rem;
+    line-height: 1.8;
+}
+
+/* Area amplop dibuat lebih lebar agar dekorasi
+   dapat tersebar di ruang kosong halaman */
+
+.envelope-stage {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 1100px);
+    min-height: 440px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Amplop */
+
+.envelope {
+    position: relative;
+    z-index: 3;
+    width: min(78vw, 430px);
+    height: 275px;
+    margin-top: 26px;
+    filter: drop-shadow(0 22px 28px rgba(143, 79, 97, 0.15));
+    transition: transform 0.45s ease;
+}
+
+.envelope:hover {
+    transform: translateY(-4px);
+}
+
+.envelope-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    background: #e9b9bf;
+    border: 1px solid #e2afb8;
+}
+
+/* Kertas bagian atas amplop */
+
+.letter-preview {
+    position: absolute;
+    z-index: 1;
+    left: 8%;
+    right: 8%;
+    top: -43px;
+    height: 95px;
+    padding: 15px 10px;
+    border-radius: 6px 6px 0 0;
+    background: #fffaf3;
+    text-align: center;
+    box-shadow: 0 -3px 12px rgba(100, 55, 68, 0.04);
+    transition:
+        top 0.8s ease,
+        transform 0.8s ease;
+}
+
+.letter-topline {
+    color: #b47d89;
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+}
+
+/* Badan depan amplop */
+
+.envelope-front {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    border-radius: 5px;
+    background: linear-gradient(
+        145deg,
+        #f4d1d3,
+        #edc0c5
+    );
+    clip-path: polygon(
+        0 0,
+        50% 53%,
+        100% 0,
+        100% 100%,
+        0 100%
+    );
+}
+
+/* Bingkai foto bulat di depan amplop */
+
+.envelope-portrait {
+    position: absolute;
+    z-index: 10;
+    width: 112px;
+    height: 112px;
+
+    /* Posisi foto di bagian atas amplop */
+    top: 122px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    padding: 6px;
+    border-radius: 50%;
+    background: #fffaf3;
+    border: 2px solid #dba2ae;
+
+    box-shadow:
+        0 5px 15px rgba(113, 62, 78, 0.18),
+        0 0 0 5px rgba(255, 250, 243, 0.7);
+
+    transition: transform 0.35s ease;
+}
+
+.envelope-portrait:hover {
+    transform: translateX(-50%) scale(1.07);
+}
+
+.envelope-portrait .round-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Lipatan atas */
+
+.envelope-flap {
+    position: absolute;
+    z-index: 6;
+    inset: 0;
+    background: linear-gradient(
+        150deg,
+        #f7dcda,
+        #edc0c5
+    );
+    clip-path: polygon(
+        0 0,
+        100% 0,
+        50% 55%
+    );
+    transform-origin: top center;
+    transition: transform 0.7s ease;
+    pointer-events: none;
+}
+
+/* Segel hati di bawah foto */
+.envelope .seal {
+    display: none;
+}
+
+.seal {
+    position: absolute;
+    z-index: 7;
+    left: 50%;
+    top: 62%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #b96e83;
+    border: 3px solid #f4d5d8;
+    color: #fff8f4;
+    font-size: 22px;
+    box-shadow: 0 4px 10px rgba(110, 54, 72, 0.18);
+    transition: opacity 0.25s ease;
+}
+
+.envelope.opened .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.envelope.opened .letter-preview {
+    top: -125px;
+    transform: scale(1.06);
+}
+
+.envelope.opened .seal {
+    opacity: 0;
+}
+
+/* Tombol dan teks di bawah amplop */
+
+.tap-hint {
+    position: relative;
+    z-index: 8;
+    margin: 16px 0 12px;
+    color: #9b7b86;
+    font-size: 0.78rem;
+}
+
+.btn-open {
+    position: relative;
+    z-index: 8;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 13px 17px 13px 25px;
+    color: #fff;
+    background: #b15f7b;
+    border: 0;
+    border-radius: 50px;
+    box-shadow: 0 9px 22px rgba(157, 76, 105, 0.22);
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.btn-open:hover {
+    color: #fff;
+    background: #984b67;
+    transform: translateY(-3px);
+    box-shadow: 0 13px 25px rgba(157, 76, 105, 0.28);
+}
+
+.btn-arrow {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.bottom-note {
+    position: relative;
+    z-index: 4;
+    margin: 0;
+    color: #ac8b96;
+    font-size: 0.72rem;
+    text-align: center;
+}
+
+.bottom-note span {
+    color: #c4778d;
+}
+
+/* =========================================
+   HIASAN LATAR BELAKANG
+========================================= */
+
+.scattered-decor {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.decor {
+    position: absolute;
+    display: block;
+    user-select: none;
+}
+
+/* Hati dan bintang di sisi kiri */
+
+.decor-heart-left {
+    top: 43%;
+    left: 8%;
+    font-size: 30px;
+    color: #e9a1b1;
+    transform: rotate(-15deg);
+    animation: decorFloat 4.5s ease-in-out infinite;
+}
+
+.decor-star-left {
+    top: 65%;
+    left: 17%;
+    font-size: 31px;
+    color: #d9ae67;
+    animation: decorTwinkle 3s ease-in-out infinite;
+}
+
+.decor-flower-left {
+    bottom: 8%;
+    left: 4%;
+    font-size: 50px;
+    color: #d6a3aa;
+    opacity: 0.8;
+    animation: decorFloat 5s ease-in-out infinite;
+}
+
+.decor-ribbon {
+    top: 8%;
+    left: 4%;
+    font-size: 56px;
+    transform: rotate(-18deg);
+    animation: decorFloat 5s ease-in-out infinite;
+}
+
+/* Hati dan bintang di sisi kanan */
+
+.decor-heart-right {
+    top: 42%;
+    right: 8%;
+    font-size: 35px;
+    color: #df9aab;
+    transform: rotate(15deg);
+    animation: decorFloat 4s ease-in-out infinite reverse;
+}
+
+.decor-star-right {
+    top: 61%;
+    right: 17%;
+    font-size: 36px;
+    color: #d9ae67;
+    animation: decorTwinkle 3.5s ease-in-out infinite;
+}
+
+.decor-flower-right {
+    bottom: 12%;
+    right: 5%;
+    font-size: 49px;
+    color: #d5a1ac;
+    opacity: 0.8;
+    animation: decorFloat 4.7s ease-in-out infinite reverse;
+}
+
+.decor-petal-left {
+    top: 25%;
+    left: 20%;
+    font-size: 25px;
+    animation: decorFloat 4s ease-in-out infinite;
+}
+
+.decor-petal-right {
+    bottom: 26%;
+    right: 20%;
+    font-size: 30px;
+    animation: decorFloat 5s ease-in-out infinite reverse;
+}
+
+/* Kartu pesan dekoratif */
+
+.decor-note {
+    bottom: 8%;
+    left: 14%;
+    padding: 19px 23px;
+    background: #fff5e6;
+    border: 1px solid #f0dfce;
+    box-shadow: 0 9px 25px rgba(115, 77, 65, 0.09);
+    color: #9c796b;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    text-align: center;
+    transform: rotate(-8deg);
+}
+
+.decor-note::before {
+    content: "";
+    position: absolute;
+    width: 45px;
+    height: 13px;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    background: #e7a9b3;
+    opacity: 0.8;
+}
+
+.decor-stamp {
+    top: 7%;
+    right: 8%;
+    width: 65px;
+    height: 75px;
+    display: grid;
+    place-items: center;
+    border: 3px dashed #e0b7b9;
+    outline: 5px solid #fff5ec;
+    background: #fff7ed;
+    color: #c27d8d;
+    font-size: 32px;
+    transform: rotate(9deg);
+    box-shadow: 0 7px 18px rgba(115, 77, 65, 0.07);
+}
+
+/* Animasi lembut */
+
+@keyframes decorFloat {
+    0%, 100% {
+        translate: 0 0;
+    }
+
+    50% {
+        translate: 0 -12px;
+    }
+}
+
+@keyframes decorTwinkle {
+    0%, 100% {
+        opacity: 0.55;
+        scale: 0.92;
+    }
+
+    50% {
+        opacity: 1;
+        scale: 1.12;
+    }
+}
+
+/* =========================================
+   RESPONSIVE: TABLET DAN HP
+========================================= */
+
+@media (max-width: 768px) {
+    .page-one {
+        padding: 45px 16px 25px;
+    }
+
+    .intro-copy h1 {
+        font-size: clamp(2.35rem, 8vw, 3.7rem);
+    }
+
+    .envelope-stage {
+        min-height: 390px;
+    }
+
+    .envelope {
+        width: min(78vw, 380px);
+        height: 240px;
+        margin-top: 35px;
+    }
+
+    .envelope-portrait {
+        width: 98px;
+        height: 98px;
+        top: 25px;
+    }
+
+    .decor-ribbon {
+        top: 3%;
+        left: 1%;
+        font-size: 37px;
+    }
+
+    .decor-stamp {
+        right: 4%;
+        width: 45px;
+        height: 52px;
+        font-size: 23px;
+    }
+
+    .decor-heart-left {
+        left: 3%;
+        top: 47%;
+        font-size: 23px;
+    }
+
+    .decor-heart-right {
+        right: 3%;
+        top: 46%;
+        font-size: 26px;
+    }
+
+    .decor-note {
+        left: 4%;
+        bottom: 6%;
+        padding: 12px 15px;
+        font-size: 0.85rem;
+    }
+
+    .decor-flower-left {
+        left: 2%;
+        bottom: 23%;
+        font-size: 30px;
+    }
+
+    .decor-flower-right {
+        right: 3%;
+        bottom: 22%;
+        font-size: 32px;
+    }
+
+    .decor-star-left {
+        left: 8%;
+    }
+
+    .decor-star-right {
+        right: 8%;
+    }
+
+    .decor-petal-left {
+        left: 9%;
+        top: 25%;
+    }
+
+    .decor-petal-right {
+        right: 8%;
+        bottom: 30%;
+    }
+
+    .bottom-note {
+        margin-top: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-one {
+        padding: 38px 12px 24px;
+    }
+
+    .intro-copy {
+        margin-bottom: 15px;
+    }
+
+    .intro-copy .eyebrow {
+        font-size: 0.55rem;
+        letter-spacing: 0.15em;
+    }
+
+    .intro-copy h1 {
+        font-size: clamp(2.1rem, 9vw, 2.8rem);
+    }
+
+    .intro-subtitle {
+        max-width: 310px;
+        font-size: 0.8rem;
+    }
+
+    .envelope-stage {
+        min-height: 355px;
+    }
+
+    .envelope {
+        width: min(82vw, 330px);
+        height: 205px;
+        margin-top: 38px;
+    }
+
+    .letter-preview {
+        top: -32px;
+        height: 75px;
+    }
+
+    .letter-topline {
+        font-size: 0.48rem;
+    }
+
+    .envelope-portrait {
+        width: 82px;
+        height: 82px;
+        top: 22px;
+        padding: 4px;
+    }
+
+    .seal {
+        width: 34px;
+        height: 34px;
+        font-size: 18px;
+        top: 65%;
+    }
+
+    .envelope.opened .letter-preview {
+        top: -90px;
+    }
+
+    .tap-hint {
+        margin-top: 15px;
+        font-size: 0.7rem;
+    }
+
+    .btn-open {
+        padding: 11px 14px 11px 21px;
+        font-size: 0.9rem;
+    }
+
+    /* Supaya hiasan tetap jauh dari amplop,
+       tetapi tidak memenuhi layar HP */
+
+    .decor-ribbon {
+        font-size: 29px;
+        top: 2%;
+    }
+
+    .decor-stamp {
+        width: 35px;
+        height: 42px;
+        font-size: 18px;
+        top: 3%;
+        right: 6%;
+    }
+
+    .decor-heart-left {
+        left: 3%;
+        top: 48%;
+    }
+
+    .decor-heart-right {
+        right: 3%;
+        top: 48%;
+    }
+
+    .decor-note {
+        left: 3%;
+        bottom: 5%;
+        padding: 9px 11px;
+        font-size: 0.72rem;
+    }
+
+    .decor-flower-left {
+        left: 4%;
+        bottom: 20%;
+        font-size: 25px;
+    }
+
+    .decor-flower-right {
+        right: 4%;
+        bottom: 20%;
+        font-size: 27px;
+    }
+
+    .decor-star-left {
+        left: 7%;
+        top: 68%;
+        font-size: 23px;
+    }
+
+    .decor-star-right {
+        right: 7%;
+        top: 67%;
+        font-size: 25px;
+    }
+
+    .decor-petal-left {
+        left: 8%;
+        top: 27%;
+        font-size: 18px;
+    }
+
+    .decor-petal-right {
+        right: 8%;
+        bottom: 28%;
+        font-size: 20px;
+    }
+
+    .bottom-note {
+        font-size: 0.65rem;
+    }
+}
+
+
+/* ==========================================
+   REDESAIN HALAMAN PERTAMA
+========================================== */
+
+.page-one {
+    min-height: 100vh;
+    padding: 28px 30px 24px;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+/* Judul lebih dekat ke amplop */
+
+.page-one .intro-copy {
+    max-width: 1000px;
+    margin-bottom: 0;
+}
+
+.page-one .intro-copy h1 {
+    font-size: clamp(3rem, 5.3vw, 4.8rem);
+    line-height: 1.02;
+}
+
+.page-one .intro-copy .eyebrow {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.page-one .intro-subtitle {
+    margin-top: 12px;
+    max-width: 460px;
+}
+
+/* Area amplop diperbesar */
+
+.page-one .envelope-stage {
+    width: min(100%, 1000px);
+    min-height: 0;
+    flex: 1;
+    justify-content: center;
+    margin: 0 auto;
+    padding-bottom: 30px;
+}
+
+/* Amplop utama */
+
+.page-one .envelope {
+    width: min(70vw, 540px);
+    height: clamp(270px, 35vh, 350px);
+    margin-top: 12px;
+}
+
+/* Foto bulat tetap di depan amplop */
+
+.page-one .envelope-portrait {
+    width: 112px;
+    height: 112px;
+    top: 122px;
+    z-index: 10;
+}
+
+/* Segel love tidak bertumpuk dengan foto */
+.page-one .envelope .seal {
+    display: none;
+}
+
+/* Kertas sedikit lebih terlihat */
+
+.page-one .letter-preview {
+    left: 7%;
+    right: 7%;
+    height: 105px;
+    top: -38px;
+}
+
+/* Tombol dan teks */
+
+.page-one .tap-hint {
+    margin-top: 18px;
+    margin-bottom: 12px;
+}
+
+.page-one .btn-open {
+    padding: 14px 24px;
+    gap: 18px;
+    font-size: 0.95rem;
+}
+
+.page-one .bottom-note {
+    margin-top: 0;
+}
+
+/* ==========================================
+   HIASAN LEBIH SEIMBANG
+========================================== */
+
+.page-one .decor-ribbon {
+    top: 16%;
+    left: 8%;
+}
+
+.page-one .decor-stamp {
+    top: 15%;
+    right: 9%;
+}
+
+.page-one .decor-heart-left {
+    top: 43%;
+    left: 7%;
+    font-size: 34px;
+}
+
+.page-one .decor-heart-right {
+    top: 43%;
+    right: 7%;
+    font-size: 36px;
+}
+
+.page-one .decor-star-left {
+    top: 69%;
+    left: 17%;
+    font-size: 35px;
+}
+
+.page-one .decor-star-right {
+    top: 68%;
+    right: 17%;
+    font-size: 38px;
+}
+
+.page-one .decor-flower-left {
+    bottom: 9%;
+    left: 7%;
+    font-size: 44px;
+}
+
+.page-one .decor-flower-right {
+    bottom: 10%;
+    right: 7%;
+    font-size: 45px;
+}
+
+.page-one .decor-petal-left {
+    top: 28%;
+    left: 21%;
+}
+
+.page-one .decor-petal-right {
+    bottom: 25%;
+    right: 21%;
+}
+
+.page-one .decor-note {
+    bottom: 8%;
+    left: 17%;
+}
+
+/* Responsif tablet */
+
+@media (max-width: 768px) {
+    .page-one {
+        padding: 35px 18px 24px;
+    }
+
+    .page-one .intro-copy h1 {
+        font-size: clamp(2.5rem, 7vw, 3.8rem);
+    }
+
+    .page-one .envelope-stage {
+        padding-bottom: 15px;
+    }
+
+    .page-one .envelope {
+        width: min(82vw, 440px);
+        height: 270px;
+    }
+
+    .page-one .envelope-portrait {
+        top: 112px;
+        width: 98px;
+        height: 98px;
+    }
+
+    .page-one .decor-note {
+        left: 4%;
+    }
+
+    .page-one .decor-petal-left {
+        left: 9%;
+    }
+
+    .page-one .decor-petal-right {
+        right: 9%;
+    }
+}
+
+/* Responsif HP */
+
+@media (max-width: 480px) {
+    .page-one {
+        padding: 30px 14px 22px;
+    }
+
+    .page-one .intro-copy h1 {
+        font-size: clamp(2.1rem, 8.5vw, 2.8rem);
+    }
+
+    .page-one .intro-subtitle {
+        font-size: 0.78rem;
+        max-width: 320px;
+    }
+
+    .page-one .envelope-stage {
+        justify-content: center;
+        padding-bottom: 15px;
+    }
+
+    .page-one .envelope {
+        width: min(88vw, 360px);
+        height: 230px;
+        margin-top: 28px;
+    }
+
+    .page-one .envelope-portrait {
+        width: 86px;
+        height: 86px;
+        top: 98px;
+    }
+
+    .page-one .letter-preview {
+        top: -32px;
+        height: 80px;
+    }
+
+    .page-one .decor-ribbon {
+        top: 3%;
+        left: 3%;
+    }
+
+    .page-one .decor-stamp {
+        top: 4%;
+        right: 5%;
+    }
+
+    .page-one .decor-note {
+        display: none;
+    }
+
+    .page-one .decor-heart-left {
+        left: 3%;
+    }
+
+    .page-one .decor-heart-right {
+        right: 3%;
+    }
+
+    .page-one .decor-star-left {
+        left: 5%;
+    }
+
+    .page-one .decor-star-right {
+        right: 5%;
+    }
+}
+
+
+/* ==========================================
+   KUALITAS FOTO GALERI POLAROID
+========================================== */
+
+/* Sesuaikan selector jika nama class di HTML berbeda */
+.polaroid img,
+.photo-card img,
+.memory-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    image-rendering: auto;
+    backface-visibility: hidden;
+}
+
+/* Hindari memperbesar foto melebihi kebutuhan */
+.polaroid,
+.photo-card,
+.memory-card {
+    overflow: hidden;
+}
+
+/* Foto jangan dibuat buram oleh filter CSS */
+.polaroid img,
+.photo-card img,
+.memory-card img {
+    filter: none;
+}
+
+
+/* ====================================
+   FOTO POLAROID LEBIH TAJAM
+==================================== */
+
+.polaroid {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 10px 10px 0;
+    border: 0;
+    background: #fffdf9;
+    cursor: pointer;
+    overflow: visible;
+    box-shadow: 0 7px 20px rgba(88, 62, 73, 0.12);
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.polaroid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center;
+    image-rendering: auto;
+    filter: none;
+    transform: none;
+    -webkit-transform: none;
+    backface-visibility: hidden;
+}
+
+/* Hindari pembesaran gambar saat hover */
+.polaroid:hover img {
+    filter: none;
+}
+
+/* Caption tetap rapi */
+
+.polaroid-caption {
+    display: block;
+    padding: 12px 4px 14px;
+    color: #947982;
+    font-family: Georgia, serif;
+    font-size: 0.76rem;
+    text-align: center;
+}
+
+
+
+
+/* ====================================
+   FINAL FIX: HALAMAN PEMBUKA
+==================================== */
+
+.page-one {
+    min-height: 100vh;
+    padding: 30px 24px 22px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.page-one.active {
+    display: flex;
+}
+
+.page-one .intro-copy {
+    position: relative;
+    z-index: 4;
+    width: 100%;
+    max-width: 1000px;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.page-one .intro-copy h1 {
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    line-height: 1.04;
+    margin: 12px 0;
+}
+
+.page-one .intro-subtitle {
+    color: #947982;
+    font-size: 0.9rem;
+    margin: 12px auto 0;
+    max-width: 440px;
+    line-height: 1.7;
+}
+
+/* Area amplop */
+
+.page-one .envelope-stage {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 900px);
+    flex: 1;
+    min-height: 0;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0 24px;
+}
+
+.page-one .envelope {
+    position: relative;
+    width: min(76vw, 520px);
+    height: clamp(270px, 36vh, 340px);
+    margin-top: 12px;
+    flex-shrink: 0;
+}
+
+/* Lapisan amplop */
+
+.page-one .envelope-back {
+    z-index: 1;
+}
+
+.page-one .letter-preview {
+    z-index: 2;
+}
+
+.page-one .envelope-front {
+    z-index: 3;
+}
+
+.page-one .envelope-flap {
+    z-index: 6;
+}
+
+/* Foto bulat di tengah amplop */
+
+.page-one .envelope-portrait {
+    position: absolute;
+    z-index: 10;
+    width: 112px;
+    height: 112px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    border-radius: 50%;
+    background: #fffaf3;
+    border: 2px solid #dba2ae;
+    box-shadow:
+        0 5px 15px rgba(113, 62, 78, 0.18),
+        0 0 0 5px rgba(255, 250, 243, 0.65);
+    transition: transform 0.3s ease;
+}
+
+.page-one .envelope-portrait:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+}
+
+.page-one .envelope-portrait .round-photo {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Sembunyikan segel agar tidak bertumpuk dengan foto */
+
+.page-one .envelope .seal {
+    display: none;
+}
+
+/* Tombol */
+
+.page-one .btn-open {
+    margin-top: 0;
+    padding: 13px 27px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+/* Catatan bawah */
+
+.page-one .bottom-note {
+    position: relative;
+    z-index: 4;
+    margin-top: 0;
+    padding-bottom: 4px;
+}
+
+/* Hiasan latar */
+
+.page-one .scattered-decor {
+    z-index: 1;
+    pointer-events: none;
+}
+
+.page-one .decor-ribbon {
+    top: 15%;
+    left: 7%;
+}
+
+.page-one .decor-stamp {
+    top: 15%;
+    right: 8%;
+}
+
+.page-one .decor-heart-left {
+    top: 44%;
+    left: 7%;
+}
+
+.page-one .decor-heart-right {
+    top: 44%;
+    right: 7%;
+}
+
+.page-one .decor-star-left {
+    top: 72%;
+    left: 16%;
+}
+
+.page-one .decor-star-right {
+    top: 72%;
+    right: 16%;
+}
+
+.page-one .decor-flower-left {
+    bottom: 8%;
+    left: 7%;
+}
+
+.page-one .decor-flower-right {
+    bottom: 8%;
+    right: 7%;
+}
+
+.page-one .decor-note {
+    bottom: 10%;
+    left: 15%;
+}
+
+/* Tablet */
+
+@media (max-width: 768px) {
+    .page-one {
+        padding: 30px 16px 20px;
+    }
+
+    .page-one .intro-copy h1 {
+        font-size: clamp(2.5rem, 7vw, 3.6rem);
+    }
+
+    .page-one .envelope {
+        width: min(82vw, 440px);
+        height: 270px;
+    }
+
+    .page-one .envelope-portrait {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* HP */
+
+@media (max-width: 480px) {
+    .page-one {
+        padding: 28px 12px 18px;
+    }
+
+    .page-one .intro-copy h1 {
+        font-size: clamp(2rem, 8.5vw, 2.7rem);
+    }
+
+    .page-one .intro-subtitle {
+        font-size: 0.78rem;
+    }
+
+    .page-one .envelope-stage {
+        padding: 22px 0;
+    }
+
+    .page-one .envelope {
+        width: 88vw;
+        height: 225px;
+    }
+
+    .page-one .envelope-portrait {
+        width: 88px;
+        height: 88px;
+    }
+
+    .page-one .decor-note {
+        display: none;
+    }
+
+    .page-one .decor-ribbon {
+        top: 3%;
+        left: 3%;
+    }
+
+    .page-one .decor-stamp {
+        top: 4%;
+        right: 5%;
+    }
+}
+
+
+/* =========================================
+   SCRAPBOOK BIRTHDAY - HALAMAN PERTAMA
+========================================= */
+
+.page-one {
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    padding: 38px 7% 20px;
+    overflow: hidden;
+    background:
+        radial-gradient(
+            ellipse at 10% 20%,
+            rgba(239, 194, 204, 0.22),
+            transparent 30%
+        ),
+        radial-gradient(
+            ellipse at 90% 85%,
+            rgba(231, 207, 168, 0.28),
+            transparent 30%
+        ),
+        #f9efeb;
+}
+
+.page-one.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Judul utama */
+
+.birthday-heading {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    margin: 0 auto 18px;
+    width: 100%;
+}
+
+.birthday-heading .eyebrow {
+    display: inline-block;
+    color: #b46e82;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    margin-bottom: 12px;
+}
+
+.birthday-heading h1 {
+    margin: 0;
+    color: #583e49;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(2.7rem, 4.5vw, 4.4rem);
+    line-height: 1.06;
+    letter-spacing: -0.045em;
+}
+
+.birthday-heading h1 em {
+    color: #c4778d;
+    font-weight: 500;
+}
+
+.birthday-heading > p {
+    margin: 15px auto 0;
+    color: #967c84;
+    font-size: 0.88rem;
+    line-height: 1.8;
+}
+
+/* Dua kolom utama */
+
+.birthday-main {
+    position: relative;
+    z-index: 2;
+    width: min(100%, 1000px);
+    flex: 1;
+    min-height: 360px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    align-items: center;
+    justify-items: center;
+    gap: clamp(30px, 6vw, 90px);
+}
+
+/* Kartu scrapbook kiri */
+
+.memory-note {
+    position: relative;
+    width: min(100%, 265px);
+    padding: 35px 27px 25px;
+    background: #fff8ed;
+    border: 1px solid #f0dfcf;
+    box-shadow: 0 15px 35px rgba(105, 69, 65, 0.10);
+    transform: rotate(-5deg);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.memory-note:hover {
+    transform: rotate(-2deg) translateY(-6px);
+    box-shadow: 0 20px 40px rgba(105, 69, 65, 0.15);
+}
+
+.note-tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 85px;
+    height: 22px;
+    transform: translateX(-50%) rotate(-4deg);
+    background: rgba(224, 167, 177, 0.65);
+}
+
+.note-flower {
+    position: absolute;
+    top: 17px;
+    right: 18px;
+    color: #c47c91;
+    font-size: 1.4rem;
+}
+
+.note-small {
+    margin: 0 0 18px;
+    color: #b28a91;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+}
+
+.memory-note h2 {
+    margin: 0;
+    color: #8d566b;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(1.55rem, 2.3vw, 2rem);
+    line-height: 1.3;
+    font-weight: 600;
+}
+
+.note-divider {
+    width: 48px;
+    height: 2px;
+    margin: 20px 0;
+    background: #dca3ad;
+}
+
+.note-description {
+    color: #947c80;
+    font-family: Georgia, serif;
+    font-size: 0.84rem;
+    line-height: 1.9;
+}
+
+.note-signature {
+    display: block;
+    margin-top: 23px;
+    color: #bb7389;
+    font-family: Georgia, serif;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+/* Area amplop kanan */
+
+.envelope-area {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.envelope-heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    color: #bd8190;
+}
+
+.envelope-heading p {
+    margin: 0;
+    font-size: 0.62rem;
+    letter-spacing: 0.19em;
+    font-weight: 700;
+}
+
+.envelope-heading span {
+    font-size: 0.8rem;
+}
+
+/* Amplop */
+
+.page-one .envelope {
+    position: relative;
+    isolation: isolate;
+    width: min(100%, 440px);
+    height: 275px;
+    margin: 0;
+    flex-shrink: 0;
+    filter: drop-shadow(0 18px 24px rgba(143, 79, 97, 0.15));
+    transition: transform 0.35s ease;
+}
+
+.page-one .envelope:hover {
+    transform: translateY(-4px);
+}
+
+.page-one .envelope-back {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    border-radius: 5px;
+    background: #e9b9bf;
+    border: 1px solid #e2afb8;
+}
+
+.page-one .letter-preview {
+    position: absolute;
+    z-index: 2;
+    left: 7%;
+    right: 7%;
+    top: -37px;
+    height: 95px;
+    padding: 14px 8px;
+    background: #fffaf3;
+    border-radius: 6px 6px 0 0;
+    transition: top 0.7s ease;
+}
+
+.page-one .letter-topline {
+    color: #b47d89;
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+}
+
+.page-one .letter-preview p {
+    margin-top: 15px;
+    color: #b78691;
+    font-family: Georgia, serif;
+    font-size: 0.8rem;
+    font-style: italic;
+}
+
+.page-one .envelope-front {
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    border-radius: 5px;
+    background: linear-gradient(145deg, #f4d1d3, #edc0c5);
+    clip-path: polygon(
+        0 0,
+        50% 53%,
+        100% 0,
+        100% 100%,
+        0 100%
+    );
+}
+
+.page-one .envelope-flap {
+    position: absolute;
+    z-index: 6;
+    inset: 0;
+    background: linear-gradient(150deg, #f7dcda, #edc0c5);
+    clip-path: polygon(0 0, 100% 0, 50% 55%);
+    transform-origin: top center;
+    transition: transform 0.7s ease;
+    pointer-events: none;
+}
+
+/* Foto bulat */
+
+.page-one .envelope-portrait {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    width: 112px;
+    height: 112px;
+    padding: 5px;
+    transform: translate(-50%, -50%);
+    border: 2px solid #dba2ae;
+    border-radius: 50%;
+    background: #fffaf3;
+    box-shadow:
+        0 5px 15px rgba(113, 62, 78, 0.18),
+        0 0 0 5px rgba(255, 250, 243, 0.65);
+    transition: box-shadow 0.3s ease;
+}
+
+.page-one .envelope-portrait:hover {
+    box-shadow:
+        0 8px 22px rgba(113, 62, 78, 0.22),
+        0 0 0 7px rgba(255, 250, 243, 0.75);
+}
+
+.page-one .round-photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.page-one .envelope .seal {
+    display: none;
+}
+
+/* Efek buka amplop */
+
+.page-one .envelope.opened .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.page-one .envelope.opened .letter-preview {
+    top: -95px;
+}
+
+/* Tombol */
+
+.envelope-hint {
+    margin: 17px 0 12px;
+    color: #a17f8a;
+    font-size: 0.77rem;
+}
+
+.page-one .btn-open {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 13px 24px;
+    border: 0;
+    border-radius: 50px;
+    color: #fff;
+    background: #b15f7b;
+    box-shadow: 0 9px 22px rgba(157, 76, 105, 0.22);
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.page-one .btn-open:hover {
+    color: #fff;
+    background: #984b67;
+    transform: translateY(-3px);
+}
+
+.page-one .btn-arrow {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.envelope-footnote {
+    margin-top: 13px;
+    color: #b0949c;
+    font-family: Georgia, serif;
+    font-size: 0.7rem;
+    font-style: italic;
+}
+
+/* Footer */
+
+.birthday-footer {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    margin-top: 12px;
+    color: #a98993;
+    font-size: 0.72rem;
+}
+
+.birthday-footer span {
+    color: #c4778d;
+}
+
+/* Hiasan sudut */
+
+.page-one .scattered-decor {
+    z-index: 1;
+    pointer-events: none;
+}
+
+.page-one .decor-ribbon {
+    top: 15%;
+    left: 7%;
+    font-size: 43px;
+}
+
+.page-one .decor-stamp {
+    top: 14%;
+    right: 8%;
+}
+
+.page-one .decor-heart-left {
+    top: 44%;
+    left: 5%;
+    font-size: 32px;
+}
+
+.page-one .decor-heart-right {
+    top: 44%;
+    right: 5%;
+    font-size: 35px;
+}
+
+.page-one .decor-star-left {
+    top: 73%;
+    left: 12%;
+}
+
+.page-one .decor-star-right {
+    top: 70%;
+    right: 12%;
+}
+
+.page-one .decor-flower-left {
+    bottom: 9%;
+    left: 5%;
+}
+
+.page-one .decor-flower-right {
+    bottom: 9%;
+    right: 5%;
+}
+
+.page-one .decor-petal-left {
+    top: 30%;
+    left: 19%;
+}
+
+.page-one .decor-petal-right {
+    bottom: 26%;
+    right: 19%;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+    .page-one {
+        padding: 35px 20px 22px;
+    }
+
+    .birthday-heading h1 {
+        font-size: clamp(2.5rem, 7vw, 3.6rem);
+    }
+
+    .birthday-main {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        padding: 25px 0;
+    }
+
+    .memory-note {
+        display: none;
+    }
+
+    .envelope-area {
+        width: min(100%, 480px);
+    }
+
+    .page-one .envelope {
+        width: min(100%, 440px);
+        height: 260px;
+    }
+
+    .page-one .envelope-portrait {
+        width: 100px;
+        height: 100px;
+    }
+
+    .page-one .decor-ribbon {
+        top: 5%;
+        left: 4%;
+        font-size: 30px;
+    }
+
+    .page-one .decor-stamp {
+        top: 5%;
+        right: 5%;
+        transform: scale(0.8) rotate(9deg);
+    }
+}
+
+@media (max-width: 480px) {
+    .page-one {
+        padding: 28px 16px 20px;
+    }
+
+    .birthday-heading .eyebrow {
+        font-size: 0.55rem;
+        letter-spacing: 0.13em;
+    }
+
+    .birthday-heading h1 {
+        font-size: clamp(2.05rem, 8.5vw, 2.8rem);
+    }
+
+    .birthday-heading > p {
+        font-size: 0.78rem;
+    }
+
+    .birthday-main {
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    .envelope-heading p {
+        font-size: 0.55rem;
+    }
+
+    .page-one .envelope {
+        width: 100%;
+        height: 225px;
+    }
+
+    .page-one .envelope-portrait {
+        width: 88px;
+        height: 88px;
+    }
+
+    .envelope-hint {
+        font-size: 0.7rem;
+    }
+
+    .page-one .decor-heart-left {
+        left: 3%;
+        top: 46%;
+    }
+
+    .page-one .decor-heart-right {
+        right: 3%;
+        top: 46%;
+    }
+
+    .page-one .decor-star-left {
+        left: 5%;
+        top: 75%;
+    }
+
+    .page-one .decor-star-right {
+        right: 5%;
+        top: 75%;
+    }
+
+    .page-one .decor-petal-left {
+        left: 5%;
+        top: 33%;
+        font-size: 20px;
+    }
+
+    .page-one .decor-petal-right {
+        right: 5%;
+        bottom: 27%;
+        font-size: 20px;
+    }
+
+    .birthday-footer {
+        font-size: 0.65rem;
+    }
+}
+
+
+/* FIX FINAL: HALAMAN PERTAMA DI MOBILE */
+
+@media (max-width: 768px) {
+    .page-one {
+        min-height: 100vh;
+        min-height: 100svh;
+        height: auto;
+        overflow-x: clip;
+        overflow-y: visible;
+        padding: 30px 18px 25px;
+    }
+
+    .birthday-heading,
+    .birthday-main,
+    .birthday-footer {
+        position: relative;
+        z-index: 3;
+    }
+
+    .birthday-heading h1 {
+        font-size: clamp(2rem, 7vw, 3rem);
+        overflow-wrap: anywhere;
+    }
+
+    .birthday-main {
+        display: flex;
+        flex-direction: column;
+        flex: none;
+        min-height: auto;
+        width: 100%;
+        gap: 28px;
+        padding: 20px 0;
+    }
+
+    /* Kartu tidak disembunyikan */
+    .memory-note {
+        display: block !important;
+        width: min(78%, 270px);
+        margin: 8px auto;
+    }
+
+    .envelope-area {
+        display: flex;
+        width: 100%;
+        max-width: 440px;
+        min-width: 0;
+        margin: 0 auto;
+    }
+
+    .page-one .envelope {
+        width: 100%;
+        max-width: 400px;
+        height: clamp(210px, 58vw, 270px);
+        margin: 0 auto;
+    }
+
+    .page-one .envelope-portrait {
+        width: 88px;
+        height: 88px;
+    }
+
+    /* Hiasan jangan hilang */
+    .page-one .scattered-decor {
+        display: block !important;
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .page-one .decor {
+        display: block !important;
+    }
+
+    .birthday-footer {
+        flex-shrink: 0;
+        margin-top: 10px;
+        padding-bottom: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-one {
+        padding: 26px 16px 22px;
+    }
+
+    .birthday-heading .eyebrow {
+        font-size: 0.48rem;
+        letter-spacing: 0.1em;
+    }
+
+    .birthday-heading h1 {
+        font-size: clamp(1.8rem, 8vw, 2.4rem);
+    }
+
+    .birthday-heading > p {
+        font-size: 0.74rem;
+    }
+
+    .memory-note {
+        width: min(78%, 250px);
+        padding: 26px 20px 20px;
+    }
+
+    .memory-note h2 {
+        font-size: 1.5rem;
+    }
+
+    .note-description {
+        font-size: 0.76rem;
+    }
+
+    .page-one .envelope {
+        height: 215px;
+    }
+
+    .page-one .envelope-portrait {
+        width: 80px;
+        height: 80px;
+    }
+
+    .page-one .decor-heart-left {
+        left: 2%;
+        top: 40%;
+    }
+
+    .page-one .decor-heart-right {
+        right: 2%;
+        top: 40%;
+    }
+}
+
+/* =====================================================
+   FINAL PATCH - MOBILE HALAMAN PERTAMA
+   Aturan ini sengaja diletakkan paling bawah agar
+   mengalahkan aturan responsive lama yang bertumpuk.
+===================================================== */
+
+.page-one {
+  min-height: 100vh;
+  min-height: 100svh;
+  height: auto;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+.page-one.active {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Pastikan semua dekorasi berada di dalam halaman */
+.page-one .scattered-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.page-one .decor {
+  display: block;
+}
+
+/* Perbaiki kualitas dan proporsi foto polaroid */
+.polaroid {
+  overflow: visible;
+}
+
+.polaroid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 4.6;
+  object-fit: cover;
+  object-position: center;
+  image-rendering: auto;
+  filter: none;
+}
+
+@media (max-width: 768px) {
+  .page-one {
+    padding: 30px 18px 24px;
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
+  .birthday-heading,
+  .birthday-main,
+  .birthday-footer {
+    position: relative;
+    z-index: 3;
+  }
+
+  .birthday-heading h1 {
+    font-size: clamp(2rem, 7vw, 3.2rem);
+    overflow-wrap: anywhere;
+  }
+
+  /* Kartu scrapbook tetap terlihat */
+  .birthday-main {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    width: 100%;
+    min-height: 0;
+    gap: 28px;
+    padding: 22px 0 18px;
+  }
+
+  .memory-note {
+    display: block !important;
+    width: min(78%, 270px);
+    margin: 7px auto 0;
+    padding: 27px 21px 20px;
+  }
+
+  .memory-note h2 {
+    font-size: 1.55rem;
+  }
+
+  .note-description {
+    font-size: .76rem;
+    line-height: 1.75;
+  }
+
+  .envelope-area {
+    display: flex;
+    width: 100%;
+    max-width: 440px;
+    min-width: 0;
+    margin: 0 auto;
+  }
+
+  .page-one .envelope {
+    width: min(100%, 400px);
+    height: clamp(205px, 58vw, 260px);
+    margin: 0 auto;
+  }
+
+  .page-one .envelope-portrait {
+    top: 50%;
+    width: 90px;
+    height: 90px;
+    transform: translate(-50%, -50%);
+  }
+
+  .page-one .envelope-portrait:hover {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+
+  .page-one .decor-ribbon {
+    top: 3%;
+    left: 3%;
+    font-size: 29px;
+  }
+
+  .page-one .decor-stamp {
+    top: 4%;
+    right: 4%;
+    width: 40px;
+    height: 46px;
+    font-size: 19px;
+  }
+
+  .page-one .decor-heart-left {
+    top: 39%;
+    left: 2%;
+    font-size: 23px;
+  }
+
+  .page-one .decor-heart-right {
+    top: 39%;
+    right: 2%;
+    font-size: 25px;
+  }
+
+  .page-one .decor-star-left {
+    top: 66%;
+    left: 4%;
+    font-size: 23px;
+  }
+
+  .page-one .decor-star-right {
+    top: 66%;
+    right: 4%;
+    font-size: 25px;
+  }
+
+  .page-one .decor-flower-left {
+    bottom: 3%;
+    left: 3%;
+    font-size: 29px;
+  }
+
+  .page-one .decor-flower-right {
+    bottom: 3%;
+    right: 3%;
+    font-size: 30px;
+  }
+
+  .page-one .decor-petal-left {
+    top: 26%;
+    left: 7%;
+    font-size: 18px;
+  }
+
+  .page-one .decor-petal-right {
+    right: 7%;
+    bottom: 25%;
+    font-size: 19px;
+  }
+
+  .birthday-footer {
+    flex-shrink: 0;
+    margin-top: 6px;
+    padding-bottom: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-one {
+    padding: 27px 15px 22px;
+  }
+
+  .birthday-heading .eyebrow {
+    font-size: .49rem;
+    letter-spacing: .1em;
+  }
+
+  .birthday-heading h1 {
+    font-size: clamp(1.9rem, 8vw, 2.45rem);
+    line-height: 1.12;
+  }
+
+  .birthday-heading > p {
+    font-size: .74rem;
+  }
+
+  .memory-note {
+    width: min(78%, 250px);
+    padding: 25px 19px 19px;
+  }
+
+  .note-small {
+    font-size: .51rem;
+  }
+
+  .page-one .envelope {
+    height: 215px;
+  }
+
+  .page-one .envelope-portrait {
+    width: 82px;
+    height: 82px;
+  }
+
+  .page-one .letter-preview {
+    top: -30px;
+    height: 78px;
+  }
+
+  .page-one .envelope.opened .letter-preview {
+    top: -82px;
+  }
+
+  .envelope-heading p {
+    font-size: .5rem;
+    letter-spacing: .09em;
+  }
+
+  .envelope-hint {
+    font-size: .68rem;
+  }
+
+  .page-one .btn-open {
+    padding: 11px 17px 11px 20px;
+    font-size: .84rem;
+  }
+
+  .envelope-footnote {
+    font-size: .64rem;
+  }
+
+  .page-one .decor-note {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-one {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .birthday-heading h1 {
+    font-size: 1.85rem;
+  }
+
+  .memory-note {
+    width: 82%;
+  }
+
+  .page-one .envelope {
+    height: 195px;
+  }
+
+  .page-one .envelope-portrait {
+    width: 76px;
+    height: 76px;
+  }
+
+  .page-one .decor-petal-left,
+  .page-one .decor-petal-right {
+    display: none;
+  }
+}
+
+/* =====================================================
+   FINAL RESPONSIVE OVERRIDES — cocok dengan index.html
+   Letakkan di bagian paling bawah style.css
+===================================================== */
+.page-one {
+  min-height: 100vh;
+  min-height: 100svh;
+  height: auto;
+  overflow: hidden visible;
+}
+
+.page-one.active {
+  display: flex;
+}
+
+.birthday-main {
+  width: min(100%, 1000px);
+  min-width: 0;
+}
+
+.memory-note {
+  display: block;
+  min-width: 0;
+}
+
+.envelope-area,
+.page-one .envelope {
+  min-width: 0;
+}
+
+.page-one .envelope {
+  width: min(100%, 440px);
+}
+
+.page-one .round-photo {
+  object-fit: cover;
+}
+
+/* Halaman dua: foto dan surat tidak saling menimpa */
+.page-two {
+  min-height: 100vh;
+  min-height: 100svh;
+  height: auto;
+  overflow: visible;
+}
+
+.memory-layout {
+  width: min(100%, 1100px);
+  margin-inline: auto;
+}
+
+.polaroid-grid {
+  min-width: 0;
+}
+
+.polaroid img {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+}
+
+.birthday-letter {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 768px) {
+  .page-one {
+    padding: 30px 20px 22px;
+    overflow-x: clip;
+  }
+
+  .birthday-heading {
+    margin-bottom: 8px;
+  }
+
+  .birthday-heading h1 {
+    font-size: clamp(2.15rem, 7vw, 3.2rem);
+  }
+
+  .birthday-heading > p {
+    line-height: 1.65;
+  }
+
+  .birthday-main {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    min-height: auto;
+    padding: 25px 0 18px;
+  }
+
+  .memory-note {
+    display: block;
+    width: min(78%, 270px);
+    justify-self: center;
+    padding: 30px 24px 22px;
+  }
+
+  .envelope-area {
+    width: min(100%, 460px);
+  }
+
+  .page-one .envelope {
+    width: min(100%, 420px);
+    height: clamp(205px, 54vw, 255px);
+  }
+
+  .page-one .envelope-portrait {
+    width: clamp(78px, 21vw, 100px);
+    height: clamp(78px, 21vw, 100px);
+  }
+
+  .birthday-footer {
+    margin-top: 12px;
+  }
+
+  .memory-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .polaroid-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .polaroid {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-one {
+    padding: 25px 15px 20px;
+  }
+
+  .birthday-heading .eyebrow {
+    font-size: .52rem;
+    letter-spacing: .12em;
+  }
+
+  .birthday-heading h1 {
+    font-size: clamp(1.85rem, 8.2vw, 2.5rem);
+    line-height: 1.12;
+  }
+
+  .birthday-heading > p {
+    font-size: .75rem;
+  }
+
+  .birthday-main {
+    gap: 25px;
+    padding-top: 22px;
+  }
+
+  .memory-note {
+    width: min(78%, 245px);
+    padding: 27px 20px 20px;
+  }
+
+  .memory-note h2 {
+    font-size: 1.65rem;
+  }
+
+  .note-description {
+    font-size: .78rem;
+    line-height: 1.75;
+  }
+
+  .page-one .envelope {
+    height: clamp(185px, 53vw, 220px);
+  }
+
+  .page-one .letter-preview {
+    top: -29px;
+    height: 75px;
+  }
+
+  .page-one .envelope.opened .letter-preview {
+    top: -78px;
+  }
+
+  .envelope-heading {
+    gap: 8px;
+  }
+
+  .envelope-heading p {
+    font-size: .49rem;
+    letter-spacing: .1em;
+  }
+
+  .envelope-hint {
+    margin-top: 14px;
+    font-size: .67rem;
+  }
+
+  .page-one .btn-open {
+    gap: 12px;
+    padding: 11px 18px;
+  }
+
+  .birthday-footer {
+    font-size: .65rem;
+    text-align: center;
+  }
+
+  .page-two {
+    padding-inline: 15px;
+  }
+
+  .page-two-header h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+  }
+
+  .polaroid-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .polaroid {
+    padding: 8px 8px 12px;
+  }
+
+  .polaroid-caption {
+    font-size: .65rem;
+  }
+
+  .birthday-letter {
+    padding: 25px 20px;
+  }
+
+  .music-player {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .page-one {
+    padding-inline: 12px;
+  }
+
+  .birthday-heading h1 {
+    font-size: 1.8rem;
+  }
+
+  .memory-note {
+    width: 82%;
+  }
+
+  .page-one .envelope {
+    height: 180px;
+  }
+
+  .page-one .envelope-portrait {
+    width: 74px;
+    height: 74px;
+  }
+
+  .polaroid-grid {
+    gap: 9px;
+  }
+}

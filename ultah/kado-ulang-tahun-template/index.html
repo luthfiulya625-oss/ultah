@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8e9e6">
+  <title>Birthday</title>
+  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+  <div class="sparkles" aria-hidden="true">✦　♡　✧　✿　✧　♡　✦</div>
+
+  <main>
+
+    <!-- HALAMAN 1: SCRAPBOOK BIRTHDAY -->
+    <section id="pageOne" class="page page-one active">
+
+      <!-- Hiasan latar -->
+      <div class="scattered-decor" aria-hidden="true">
+        <span class="decor decor-ribbon">🎀</span>
+        <span class="decor decor-heart-left">♥</span>
+        <span class="decor decor-heart-right">♡</span>
+        <span class="decor decor-star-left">✦</span>
+        <span class="decor decor-star-right">✧</span>
+        <span class="decor decor-flower-left">✿</span>
+        <span class="decor decor-flower-right">❀</span>
+        <span class="decor decor-petal-left">🌸</span>
+        <span class="decor decor-petal-right">🌷</span>
+        <span class="decor decor-stamp">✿</span>
+      </div>
+
+      <!-- Header -->
+      <header class="birthday-heading">
+        <span class="eyebrow">✦ A LITTLE SURPRISE ✦</span>
+
+        <h1>
+          A special gift,<br>
+          <em>for special day.</em>
+        </h1>
+
+
+      </header>
+
+      <!-- Konten utama -->
+      <div class="birthday-main">
+
+        <!-- Kartu scrapbook di sisi kiri -->
+        <aside class="memory-note">
+          <span class="note-tape"></span>
+          <span class="note-flower">✿</span>
+
+          <h2>
+            Whishing You<br>
+            all the best<br>
+          </h2>
+
+          <div class="note-divider"></div>
+
+          <p class="note-description">
+            Happy 23rd birthday.
+            May all your dreams come true.
+            Wishing you health and happiness.
+          </p>
+
+        </aside>
+
+        <!-- Amplop utama -->
+        <div class="envelope-area">
+
+          <div class="envelope-heading">
+            <span>♡</span>
+            <span>♡</span>
+          </div>
+
+          <div class="envelope">
+
+            <div class="envelope-back"></div>
+
+
+            <div class="envelope-front"></div>
+
+            <!-- Foto bulat -->
+            <div class="envelope-portrait">
+              <img src="assets/images/ftu.jpeg" alt="Foto spesial" class="round-photo">
+            </div>
+
+            <div class="envelope-flap"></div>
+
+            <div class="seal">♡</div>
+
+          </div>
+          <br>
+
+          <button id="openGift" class="btn-open" type="button">
+            <span>Open</span>
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <footer class="birthday-footer">
+        <span>♡</span>
+        <span>♡</span>
+      </footer>
+
+    </section>
+
+
+
+    <!-- HALAMAN 2: SURAT + 4 FOTO POLAROID -->
+    <section id="pageTwo" class="page page-two" aria-hidden="true">
+      <header class="page-two-header">
+        <span class="eyebrow">A FEW LITTLE MEMORIES</span>
+        <h1>Photos of the<br><em>birthday girl</em></h1>
+      </header>
+
+      <div class="memory-layout">
+        <div class="polaroid-grid">
+          <button class="polaroid polaroid-one" type="button" data-caption="-">
+            <span class="tape"></span>
+            <img src="assets/images/ft1.jpeg" alt="Foto kenangan pertama">
+            <span class="polaroid-caption"></span>
+          </button>
+          <button class="polaroid polaroid-two" type="button" data-caption="-">
+            <span class="tape tape-pink"></span>
+            <img src="assets/images/ft2.jpeg" alt="Foto kenangan kedua">
+            <span class="polaroid-caption"></span>
+          </button>
+          <button class="polaroid polaroid-three" type="button" data-caption="-">
+            <span class="tape tape-yellow"></span>
+            <img src="assets/images/ft3.jpeg" alt="Foto kenangan ketiga">
+            <span class="polaroid-caption"></span>
+          </button>
+          <button class="polaroid polaroid-four" type="button" data-caption="-">
+            <span class="tape tape-blue"></span>
+            <img src="assets/images/ft4.jpeg" alt="Foto kenangan keempat">
+            <span class="polaroid-caption"></span>
+          </button>
+        </div>
+
+        <article class="birthday-letter">
+          <div class="letter-decoration">✿　♡　✿</div>
+          <h2>Happy Birthday! <span>♡</span></h2>
+          <div class="letter-rule"></div>
+          <!-- UBAH teks ucapan di bawah sesuai keinginanmu -->
+          <p>
+            Hope your birthday is enjoyable.
+            Hope this year brings you health, happiness, and success in everything you do.
+            And all your wishes come true.
+          </p>
+          <p>
+            Hope you have a wonderful celebration today.
+            And the coming year presents you with great opportunities and peace of mind.
+          </p>
+          <p class="letter-closing">Have a nice day!</p>
+          <div class="letter-bottom-flower">✿</div>
+        </article>
+      </div>
+
+      <div class="closing-note">
+        <button id="backToStart" class="btn-back" type="button">Back</button>
+      </div>
+
+    </section>
+  </main>
+
+
+
+  <!-- Modal caption foto -->
+  <div class="photo-modal" id="photoModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="modal-close" id="closePhotoModal" type="button" aria-label="Tutup">×</button>
+    <p id="modalCaption">Caption foto</p>
+    <span>♡</span>
+  </div>
+
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
